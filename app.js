@@ -1,29 +1,6 @@
 // React components are written in plain JavaScript, 
 // with the help of JSX, and they contain the logic required to display a small part of your UI.
 
-const players = [
-    {
-        id: 1,
-        name: "Guil",
-        score: 50
-    },
-    {
-        id: 2,
-        name: "Treasure",
-        score: 85
-    },
-    {
-        id: 3,
-        name: "Ashley",
-        score: 95
-    },
-    {
-        id: 4,
-        name: "James",
-        score: 80
-    } 
-];
-
 function Header(props) {
     return (
         <header>
@@ -49,16 +26,24 @@ class Counter extends React.Component {
         score: 0
     };
 
+    decrementScore = () => {
+        this.setState( prevState => ({
+            score: prevState.score - 1 
+        }));
+    };
+
     incrementScore = () => {
-        this.setState({
-            score: this.state.score + 1 
+        this.setState( prevState => {
+            return {
+                score: prevState.score + 1
+            }; 
         });
     };
 
     render() {
         return (
             <div className="counter">
-                <button className="counter-action decrement"> - </button>
+                <button className="counter-action decrement" onClick={this.decrementScore}> - </button>
                 <span className="counter-score">{ this.state.score}</span>
                 <button className="counter-action increment" onClick={this.incrementScore}> + </button>
             </div>
@@ -66,28 +51,51 @@ class Counter extends React.Component {
     }
 }
 
-const App = (props) => {
-    return (
-        <div className="scoreboard">
-            <Header 
-                title="Scoreboard"
-                totalPlayers={props.initialPlayers.length}
-            />
+class App extends React.Component {
 
-            {/* PLayers list */}
-            { props.initialPlayers.map( player => 
-                <Player 
-                    name={player.name}
-                    key={player.id.toString()}
+    state = {
+        players: [
+            {
+                id: 1,
+                name: "Guil"
+            },
+            {
+                id: 2,
+                name: "Treasure"
+            },
+            {
+                id: 3,
+                name: "Ashley"
+            },
+            {
+                id: 4,
+                name: "James"
+            } 
+        ]
+    };
+
+    render() {
+
+        return (
+            <div className="scoreboard">
+                <Header 
+                    title="Scoreboard"
+                    totalPlayers={this.state.players.length}
                 />
-            )}
-        </div>
-    );
+
+                {/* PLayers list */}
+                { this.state.players.map( player => 
+                    <Player 
+                        name={player.name}
+                        key={player.id.toString()}
+                    />
+                )}
+            </div>
+        );
+    }
 }
 
 ReactDOM.render( 
-    <App 
-        initialPlayers={players}
-    />, // what do I want to render 
+    <App />, // what do I want to render 
     document.getElementById('root') // where do I want to render it
 );
